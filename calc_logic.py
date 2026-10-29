@@ -2,6 +2,7 @@
 Модуль calc_logic.py
 Содержит математические функции для калькулятора.
 """
+import math
 
 def add(a: float, b: float) -> float:
     """Складывает два числа."""
@@ -32,3 +33,12 @@ def exponentiation(a: float, b: float) -> float:
     if a == 0 and b < 0:
         raise ValueError("Ноль нельзя возводить в отрицательную степень!")
     return a ** b
+
+def square_root(a: float) -> float:
+    """
+    Вычисляет квадратный корень числа.
+    Вызывает ValueError, если число меньше 0.
+    """
+    if a < 0:
+        raise ValueError("Нельзя извлекать квадратный корень из отрицательного числа!")
+    return math.sqrt(a)

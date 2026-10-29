@@ -2,7 +2,7 @@
 Главный модуль приложения Калькулятор.
 Отвечает за взаимодействие с пользователем.
 """
-import calc_logic  # Импортируем наш новый модуль
+import calc_logic
 
 def get_number(prompt: str) -> float:
     """Запрашивает у пользователя число с обработкой ошибок."""
@@ -15,11 +15,26 @@ def get_number(prompt: str) -> float:
 def main():
     print("=== Модульный Калькулятор v2.0 ===")
 
-    num1 = get_number("Введите первое число: ")
-    num2 = get_number("Введите второе число: ")
-    operation = input("Выберите операцию (+, -, *, /, **): ")
+    # 1. Сначала запрашиваем первое число
+    num1 = get_number("Введите число (или первое число для парных операций): ")
+    # 2. Запрашиваем операцию
+    operation = input("Выберите операцию (+, -, *, /, **, sqrt): ").strip()
 
     try:
+        # 3. Обрабатываем операцию (вычисоление корня), где второе число не нужно
+        if operation.lower() == 'sqrt':
+            result = calc_logic.square_root(num1)
+            print(f"Результат: √{num1} = {result}")
+            return
+
+        # 4. Если операция требует второго числа, запрашиваем его
+        if operation in ('+', '-', '*', '/', '**'):
+            num2 = get_number("Введите второе число: ")
+        else:
+            print("Неизвестная операция!")
+            return
+
+        # 5. Выполняем парные операции
         if operation == '+':
             result = calc_logic.add(num1, num2)
         elif operation == '-':
@@ -29,10 +44,7 @@ def main():
         elif operation == '/':
             result = calc_logic.divide(num1, num2)
         elif operation == '**':
-            result = calc_logic.exponentiation (num1, num2)
-        else:
-            print("Неизвестная операция!")
-            return
+            result = calc_logic.exponentiation(num1, num2)
 
         print(f"Результат: {result}")
 
@@ -40,6 +52,4 @@ def main():
         print(f"Ошибка вычисления: {e}")
 
 if __name__ == "__main__":
-
     main()
-
