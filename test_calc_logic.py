@@ -69,3 +69,21 @@ class TestDivide:
         """Тест деления на ноль (должно вызвать ValueError)."""
         with pytest.raises(ValueError, match="На ноль делить нельзя"):
             calc_logic.divide(10, 0)
+
+
+class TestModulo:
+    """Тесты для функции вычисления остатка от деления."""
+
+    def test_success(self):
+        """Успешный сценарий: обычное деление с остатком."""
+        assert calc_logic.modulo(17, 5) == 2
+
+    def test_boundary(self):
+        """Граничный случай: деление без остатка."""
+        assert calc_logic.modulo(20, 5) == 0
+
+    def test_error(self):
+        """Ошибочный сценарий: остаток от деления на ноль."""
+        with pytest.raises(ValueError, match="Нельзя вычислить остаток от деления на ноль"):
+            calc_logic.modulo(10, 0)
+

@@ -25,7 +25,7 @@ def perform_calculation():
     )
 
     operation = input(
-        "Выберите операцию (+, -, *, /, **, sqrt): "
+        "Выберите операцию (+, -, *, /, %, **, sqrt): "
     ).strip()
 
     try:
@@ -35,7 +35,7 @@ def perform_calculation():
 
             print(f"Результат: √{num1} = {result}")
 
-        elif operation in ('+', '-', '*', '/', '**'):
+        elif operation in ('+', '-', '*', '/', '%', '**'):
             num2 = get_number("Введите второе число: ")
 
             if operation == '+':
@@ -48,6 +48,8 @@ def perform_calculation():
                 result = calc_logic.divide(num1, num2)
             elif operation == '**':
                 result = calc_logic.exponentiation(num1, num2)
+            elif operation == '%':
+                result = calc_logic.modulo(num1, num2)
 
             expression = f"{num1} {operation} {num2}"
             print(f"Результат: {result}")
