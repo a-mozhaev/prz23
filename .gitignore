@@ -10,3 +10,8 @@ __pycache__/
 # Файлы ОС
 .DS_Store
 Thumbs.db
+
+# Файлы баз данных
+*.db
+*.sqlite
+*.sqlite3
