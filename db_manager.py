@@ -12,7 +12,7 @@ DB_NAME = "history.db"
 def get_connection():
     """
     Создает и возвращает соединение с базой данных.
-    
+
     Returns:
         sqlite3.Connection: Объект соединения с БД.
     """
@@ -26,7 +26,7 @@ def init_db():
     """
     conn = get_connection()
     cursor = conn.cursor()
-    
+
     cursor.execute("""
         CREATE TABLE IF NOT EXISTS history (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -35,7 +35,7 @@ def init_db():
             timestamp TEXT NOT NULL
         )
     """)
-    
+
     conn.commit()
     conn.close()
 
@@ -43,52 +43,85 @@ def init_db():
 def save_record(expression: str, result: float) -> int:
     """
     Сохраняет запись о вычислении в базу данных.
-    
+
     Args:
         expression (str): Математическое выражение (например, "2 + 2").
         result (float): Результат вычисления.
-    
+
     Returns:
         int: ID созданной записи.
     """
     conn = get_connection()
     cursor = conn.cursor()
-    
+
     timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    
+
     cursor.execute(
         "INSERT INTO history (expression, result, timestamp) VALUES (?, ?, ?)",
         (expression, result, timestamp)
     )
-    
+
     record_id = cursor.lastrowid
     conn.commit()
     conn.close()
-    
+
     return record_id
 
 
 def get_history(limit: int = 10) -> list:
     """
     Получает последние записи из истории вычислений.
-    
+
     Args:
         limit (int, optional): Количество записей. По умолчанию 10.
-    
+
     Returns:
         list: Список кортежей (id, expression, result, timestamp).
     """
     conn = get_connection()
     cursor = conn.cursor()
-    
+
     cursor.execute(
         "SELECT id, expression, result, timestamp FROM history ORDER BY id DESC LIMIT ?",
         (limit,)
     )
-    
+
     records = cursor.fetchall()
     conn.close()
-    
+
+    return records
+
+
+def search_history(keyword: str) -> list:
+    """
+    Ищет записи в истории вычислений по ключевому слову.
+
+    Args:
+        keyword (str): Ключевое слово для поиска.
+
+    Returns:
+        list: Список найденных записей
+              (id, expression, result, timestamp).
+    """
+    if not keyword.strip():
+        return []
+
+    conn = get_connection()
+    cursor = conn.cursor()
+
+    cursor.execute(
+        """
+        SELECT id, expression, result, timestamp
+        FROM history
+        WHERE expression LIKE ?
+        ORDER BY id DESC
+        """,
+        (f"%{keyword}%",)
+    )
+
+    records = cursor.fetchall()
+    conn.close()
+
     return records
 
 
@@ -96,8 +129,43 @@ def clear_history():
     """Удаляет все записи из истории."""
     conn = get_connection()
     cursor = conn.cursor()
-    
+
     cursor.execute("DELETE FROM history")
-    
+
     conn.commit()
     conn.close()
+
+
+def get_statistics() -> dict:
+    """
+    Получает статистику по истории вычислений.
+
+    Returns:
+        dict - Словарь со статистикой:
+            total - общее количество вычислений
+            average - среднее значение результатов
+            max - максимальный результат
+            min - минимальный результат
+    """
+    conn = get_connection()
+    cursor = conn.cursor()
+
+    cursor.execute("""
+        SELECT
+            COUNT(*),
+            AVG(result),
+            MAX(result),
+            MIN(result)
+        FROM history
+    """)
+
+    total, average, maximum, minimum = cursor.fetchone()
+
+    conn.close()
+
+    return {
+        "total": total,
+        "average": average,
+        "max": maximum,
+        "min": minimum
+    }
