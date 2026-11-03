@@ -15,3 +15,26 @@ Thumbs.db
 *.db
 *.sqlite
 *.sqlite3
+<<<<<<< Updated upstream
+=======
+
+# C/C++
+*.o
+*.obj
+*.exe
+*.out
+*.a
+*.so
+*.dll
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# ОС
+.DS_Store
+Thumbs.db
+>>>>>>> Stashed changes
