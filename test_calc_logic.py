@@ -87,3 +87,23 @@ class TestModulo:
         with pytest.raises(ValueError, match="Нельзя вычислить остаток от деления на ноль"):
             calc_logic.modulo(10, 0)
 
+
+
+class TestAbsoluteDifference:
+    """Тесты для абсолютной разницы двух чисел."""
+
+    def test_positive_numbers(self):
+        """Разница положительных чисел."""
+        assert calc_logic.absolute_difference(10, 5) == 5
+
+    def test_reverse_order(self):
+        """Результат не зависит от порядка чисел."""
+        assert calc_logic.absolute_difference(5, 10) == 5
+
+    def test_equal_numbers(self):
+        """Граничный случай: одинаковые числа."""
+        assert calc_logic.absolute_difference(5, 5) == 0
+
+    def test_negative_number(self):
+        """Разница отрицательного и положительного числа."""
+        assert calc_logic.absolute_difference(-5, 10) == 15

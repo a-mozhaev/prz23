@@ -52,3 +52,17 @@ def modulo(a: float, b: float) -> float:
     if b == 0:
         raise ValueError("Нельзя вычислить остаток от деления на ноль!")
     return a % b
+
+
+def absolute_difference(a: float, b: float) -> float:
+    """
+    Вычисляет абсолютную разницу двух чисел.
+
+    Args:
+        a (float): Первое число.
+        b (float): Второе число.
+
+    Returns:
+        float: Абсолютная разница двух чисел.
+    """
+    return abs(a - b)
